@@ -11,13 +11,15 @@
     <div class="container-fluid p-0">
         <header class="jumbotron text-center display-1 rounded-0">Pandemic Trivia
         </header>
-        <div class="text-center">
+        <div class="container text-center col-6">
             <div class="start-button btn pr-5 pl-5 mt-5 shadow" id="start-button">START</div>
-            <div class="row justify-content-center lead text-white" id="question"></div>
-            <div class="row justify-content-center lead text-white">
-                <div class="text-white" id="answers"></div>
+            <div class="lead text-white pb-3 text-left" id="questions"></div>
+            <div class="lead text-white text-left" id="answers"></div>
+            <div class="justify-content-center lead text-white">     
+                <button class="submit-button btn pr-3 pl-3 mt-5 shadow" id="submit">Submit</button>
+                <div id="results"></div>
+                <button class="submit-button btn pr-3 pl-3 mt-5 shadow" id="reset">Try Again</button>
             </div>
-            <div id="results"></div>
         </div>
     </div>    
 
