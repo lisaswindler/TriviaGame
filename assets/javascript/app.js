@@ -2,10 +2,11 @@ $(document).ready(function() {
     //Create starting variables
     var correct = 0;
     var incorrect = 0;
-    var timer = 60;
     var unanswered = 0;
+    var myTimer;
+    // var timer = 10;
 
-    //hide submit button
+    //hide submit and reset buttons
     $("#submit").hide();
     $("#reset").hide();
 
@@ -36,7 +37,7 @@ $(document).ready(function() {
                     "Black Death",
                     "The Plague of Justinian"
                 ],
-                correctAnswer: "Black Death"
+                correctAnswer: "Black"
             },
         { question: "What does corona mean?",
             answerChoices: [
@@ -61,7 +62,7 @@ $(document).ready(function() {
                 "80-100 million",
                 "100-150 million"
             ],
-            correctAnswer: "40-50 million"
+            correctAnswer: "40-50"
         },
         { question: "How long is COVID-19 known to survive on hard surfaces?",
                 answerChoices: [
@@ -70,7 +71,7 @@ $(document).ready(function() {
                     "72 hours",
                     "96 hours"
                 ],
-                correctAnswer: "72 hours"
+                correctAnswer: "72"
             },
             { question: "What animal was primarily responsible for spreading the bubonic plague to humans?",
             answerChoices: [
@@ -88,7 +89,7 @@ $(document).ready(function() {
                 "5 times",
                 "10 times"
             ],
-            correctAnswer: "10 times"
+            correctAnswer: "10"
         },
         { question: "When did germ theory begin to develop?",
             answerChoices: [
@@ -101,40 +102,70 @@ $(document).ready(function() {
         },
     ];
     
-
     function newQuestion() {
+        if (questionAnswer.length < 1) {
+            endGame();
+            return;
+        };
+        timer = 3;
+        clearInterval(myTimer);
+        myTimer = setInterval(setTimer, 1000);
         var randomQuestion = questionAnswer[Math.floor(Math.random() * questionAnswer.length)];
         var questionIndex = questionAnswer.indexOf(randomQuestion);
         var answers = randomQuestion.answerChoices;
-        var correctChoice = randomQuestion.correctAnswer;
+        correctChoice = randomQuestion.correctAnswer;
         $("#answers").empty();
+        $("#questions").empty();
         $("#questions").html(randomQuestion.question);
             for (var i = 0; i < answers.length; i++) {
-                $("#answers").append("<div><label><input type='radio' name='question'>" + "   " + answers[i] + "</label></div>");
+                $("#answers").append("<div><label><input type='radio' name='question' class='circle' id="+ answers[i] + ">" + "   " + answers[i] + "</label></div>");
             }; 
             $("#submit").show();
             questionAnswer.splice(questionIndex, 1);
-            // userAnswer = (answers.querySelector('input[name=question'+i+']:checked')||{}).value;
-            // console.log(userAnswer);
-            $("#answers").on('click', function() {
-                var userAnswer = $("#answers").value;
-                console.log(userAnswer);
+            $(".circle").on('click', function() {
+               userChoice = this.id;
+                 
             });
+    };
+
+    $("#submit").on('click', function() {
+        if (userChoice === correctChoice) {
+            correct++;
+            console.log("Right: " + correct);
+        } else {
+            incorrect++;
+            console.log("Wrong: " + incorrect);
         };
+        
+        newQuestion();
+    });  
+
+    function setTimer() {
+        timer--;
+        $("#timer").html("Remaining time: " + timer);
+        if (timer <= 0) {
+            console.log("time");
+            unanswered++;
+            newQuestion();
+        };
+    };
+    
 
      //Start button on click function
     $("#start-button").on('click', function() {
         $("#start-button").hide();
         newQuestion(); 
     });
-
-        $("#submit").on("click", function(){
-           newQuestion();
-        });   
-
         
+    
 
     function endGame() {
+    $("#questions").empty();
+    $("#answers").empty();
+    clearInterval(myTimer);
+    $("#submit").hide();
+    $("#timer").hide();
+    $("#reset").show();
     $("#results").html(
     '<p>Correct: '+ correct +'</p>'+
     '<p>Incorrect: '+ incorrect +'</p>'+
