@@ -4,7 +4,6 @@ $(document).ready(function() {
     var incorrect = 0;
     var unanswered = 0;
     var myTimer;
-    // var timer = 10;
 
     //hide submit and reset buttons
     $("#submit").hide();
@@ -104,16 +103,17 @@ $(document).ready(function() {
     
     function newQuestion() {
         if (questionAnswer.length < 1) {
-            endGame();
+            setTimeout(function() {endGame()}, 1000);
             return;
         };
-        timer = 3;
+        timer = 11;
         clearInterval(myTimer);
         myTimer = setInterval(setTimer, 1000);
         var randomQuestion = questionAnswer[Math.floor(Math.random() * questionAnswer.length)];
         var questionIndex = questionAnswer.indexOf(randomQuestion);
         var answers = randomQuestion.answerChoices;
         correctChoice = randomQuestion.correctAnswer;
+        setTimeout(function() {$("#correct").empty()}, 2000);
         $("#answers").empty();
         $("#questions").empty();
         $("#questions").html(randomQuestion.question);
@@ -123,20 +123,18 @@ $(document).ready(function() {
             $("#submit").show();
             questionAnswer.splice(questionIndex, 1);
             $(".circle").on('click', function() {
-               userChoice = this.id;
-                 
+               userChoice = this.id;     
             });
     };
 
     $("#submit").on('click', function() {
         if (userChoice === correctChoice) {
             correct++;
-            console.log("Right: " + correct);
+            $("#correct").html("Correct!");
         } else {
             incorrect++;
-            console.log("Wrong: " + incorrect);
+            $("#correct").html("Incorrect");
         };
-        
         newQuestion();
     });  
 
@@ -144,22 +142,19 @@ $(document).ready(function() {
         timer--;
         $("#timer").html("Remaining time: " + timer);
         if (timer <= 0) {
-            console.log("time");
             unanswered++;
             newQuestion();
         };
     };
     
-
      //Start button on click function
     $("#start-button").on('click', function() {
         $("#start-button").hide();
         newQuestion(); 
     });
         
-    
-
     function endGame() {
+    $("#correct").empty();
     $("#questions").empty();
     $("#answers").empty();
     clearInterval(myTimer);
